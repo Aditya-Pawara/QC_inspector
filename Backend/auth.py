@@ -14,14 +14,24 @@ load_dotenv()
 # 3. Default (for cloud run etc)
 
 # Get the absolute path to the directory where this file (auth.py) is located
+import json
+
+# Get the absolute path to the directory where this file (auth.py) is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SERVICE_ACCOUNT_KEY_PATH = os.path.join(BASE_DIR, "serviceAccountKey.json")
 
 cred = None
 if os.path.exists(SERVICE_ACCOUNT_KEY_PATH):
     cred = credentials.Certificate(SERVICE_ACCOUNT_KEY_PATH)
+elif os.getenv("FIREBASE_SERVICE_ACCOUNT"):
+    # Load credentials from environment variable (JSON string)
+    try:
+        service_account_info = json.loads(os.getenv("FIREBASE_SERVICE_ACCOUNT"))
+        cred = credentials.Certificate(service_account_info)
+    except Exception as e:
+         print(f"Warning: Failed to parse FIREBASE_SERVICE_ACCOUNT: {e}")
 else:
-    print(f"Warning: serviceAccountKey.json not found at {SERVICE_ACCOUNT_KEY_PATH}")
+    print(f"Warning: serviceAccountKey.json not found at {SERVICE_ACCOUNT_KEY_PATH} and FIREBASE_SERVICE_ACCOUNT not set")
 
 try:
     if not firebase_admin._apps:

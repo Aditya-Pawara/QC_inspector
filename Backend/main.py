@@ -17,13 +17,17 @@ from auth import get_current_user
 from utils.pdf_generator import generate_pdf_report
 
 # Initialize Database
-models.Base.metadata.create_all(bind=engine)
+# Initialize Database
+try:
+    models.Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Warning: Database initialization failed: {e}")
 
 app = FastAPI(title="Quality Control Inspector API", version="0.1.0")
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["http://localhost:5173", "http://localhost:3000", "*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -45,11 +49,24 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 # Initialize Analysis Service
-analysis_service = AnalysisService()
+try:
+    analysis_service = AnalysisService()
+except Exception as e:
+    print(f"Warning: AnalysisService initialization failed: {e}")
+    analysis_service = None
 
 @app.get("/")
 async def root():
-    return {"message": "Quality Control Inspector API is running"}
+    return {
+        "message": "Quality Control Inspector API is running",
+        "docs": "/docs",
+        "health": "/health",
+        "env_check": {
+            "database": "OK" if engine else "Failed",
+            "analysis_service": "OK" if analysis_service else "Failed (check GOOGLE_API_KEY)",
+            "base_url": BASE_URL
+        }
+    }
 
 @app.get("/health")
 async def health_check():
@@ -77,20 +94,26 @@ async def upload_image(
             shutil.copyfileobj(file.file, buffer)
             
         # 2. Analyze image
-        try:
-            print(f"Starting analysis for {file_path}")
-            analysis_result = await analysis_service.analyze_image(file_path)
-            
-            # Determine status
-            status_val = "completed"
-            if analysis_result.get("error"):
-                status_val = "failed"
-                print(f"Analysis reported error: {analysis_result['error']}")
-            
-        except Exception as e:
-            print(f"Analysis failed with exception: {e}")
-            analysis_result = {"error": str(e)}
+        if not analysis_service:
+            # If service failed to init (e.g. missing API key), report error
             status_val = "failed"
+            analysis_result = {"error": "Analysis Service not available. Check server logs."}
+        else:
+            try:
+                print(f"Starting analysis for {file_path}")
+                analysis_result = await analysis_service.analyze_image(file_path)
+                
+                # Determine status
+                status_val = "completed"
+                if analysis_result.get("error"):
+                    status_val = "failed"
+                    print(f"Analysis reported error: {analysis_result['error']}")
+            except Exception as e:
+                # Catch specific analysis errors
+                status_val = "failed"
+                analysis_result = {"error": str(e)}
+            
+
 
         # 3. Save to database
         db_inspection = models.InspectionProfile(
