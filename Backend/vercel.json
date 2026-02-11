@@ -1,10 +1,10 @@
 {
-  "builds": {
+  "functions": {
     "main.py": {
       "runtime": "python3.12"
     }
   },
-  "routes": [
+  "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/main.py"
