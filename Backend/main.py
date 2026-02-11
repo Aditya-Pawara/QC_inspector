@@ -30,9 +30,19 @@ app.add_middleware(
 )
 # Static file serving for uploads
 # Accessible via http://localhost:8000/uploads/filename.jpg
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
+# Handle read-only filesystem on Vercel (Lambda)
+if os.environ.get("VERCEL"):
+    print("Running on Vercel, using /tmp for uploads")
+    UPLOAD_DIR = "/tmp"
+else:
+    UPLOAD_DIR = "uploads"
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
+# Base URL for images
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 # Initialize Analysis Service
 analysis_service = AnalysisService()
@@ -93,7 +103,7 @@ async def upload_image(
         db.commit()
         db.refresh(db_inspection)
         
-        db_inspection.image_url = f"http://localhost:8000/uploads/{db_inspection.image_path}"
+        db_inspection.image_url = f"{BASE_URL}/uploads/{db_inspection.image_path}"
         return db_inspection
 
     except Exception as e:
@@ -119,7 +129,7 @@ def get_user_inspections(
         
     # Dynamically compute image_url
     for inspection in inspections:
-        inspection.image_url = f"http://localhost:8000/uploads/{inspection.image_path}"
+        inspection.image_url = f"{BASE_URL}/uploads/{inspection.image_path}"
         
     return inspections
 
@@ -133,7 +143,7 @@ def get_inspections(skip: int = 0, limit: int = 100, db: Session = Depends(get_d
         .offset(skip).limit(limit).all()
         
     for inspection in inspections:
-        inspection.image_url = f"http://localhost:8000/uploads/{inspection.image_path}"
+        inspection.image_url = f"{BASE_URL}/uploads/{inspection.image_path}"
         
     return inspections
 
@@ -154,7 +164,7 @@ def get_inspection(
     if inspection.user_id != current_user_id:
         raise HTTPException(status_code=403, detail="Not authorized to access this inspection")
         
-    inspection.image_url = f"http://localhost:8000/uploads/{inspection.image_path}"
+        inspection.image_url = f"{BASE_URL}/uploads/{inspection.image_path}"
     return inspection
 
 @app.delete("/inspections/{inspection_id}", status_code=status.HTTP_204_NO_CONTENT)

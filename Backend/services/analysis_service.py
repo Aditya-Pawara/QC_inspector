@@ -239,12 +239,13 @@ class AnalysisService:
 
             print(f"Gemini Raw Response (First 500 chars): {content[:500]}")
             
-            # DEBUG: Save raw response to file
-            try:
-                with open("debug_response.txt", "w", encoding="utf-8") as f:
-                    f.write(content)
-            except Exception as e:
-                print(f"Failed to write debug file: {e}")
+            # DEBUG: Save raw response to file if possible (local only)
+            if not os.environ.get("VERCEL"):
+                try:
+                    with open("debug_response.txt", "w", encoding="utf-8") as f:
+                        f.write(content)
+                except Exception as e:
+                    print(f"Failed to write debug file: {e}")
 
             # 1. Sanitize the string
             json_str = self._sanitize_json_string(content.strip())
