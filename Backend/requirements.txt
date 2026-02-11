@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-multipart
+sqlalchemy
+pydantic
+python-dotenv
+google-generativeai
+langchain
+langchain-google-genai
+langchain-core
+requests
+firebase-admin
+psycopg2-binary

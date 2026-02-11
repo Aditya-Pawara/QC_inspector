@@ -1,0 +1,28 @@
+# Connectivity
+node_modules/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.suo
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
