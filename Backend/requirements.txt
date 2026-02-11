@@ -11,3 +11,4 @@ langchain-core
 requests
 firebase-admin
 psycopg2-binary
+reportlab
