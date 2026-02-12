@@ -187,7 +187,7 @@ def get_inspection(
     if inspection.user_id != current_user_id:
         raise HTTPException(status_code=403, detail="Not authorized to access this inspection")
         
-        inspection.image_url = f"{BASE_URL}/uploads/{inspection.image_path}"
+    inspection.image_url = f"{BASE_URL}/uploads/{inspection.image_path}"
     return inspection
 
 @app.delete("/inspections/{inspection_id}", status_code=status.HTTP_204_NO_CONTENT)

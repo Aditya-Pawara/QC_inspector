@@ -1,0 +1,54 @@
+{"defects": [
+        {
+            "name": "Severe Packaging Tear and Puncture",
+            "description": "A large, irregular tear and puncture is present on the front-right side of the cardboard box, extending from the top flap down the side. The cardboard material is ripped, crushed, and severely deformed, creating a significant opening.",
+            "location": "Front-right side of the main product box"
+        },
+        {
+            "name": "Crushed and Deformed Packaging Structure",
+            "description": "The entire right side and the bottom-right corner of the cardboard box are extensively crushed, creased, and no longer maintain their original structural integrity or shape. This indicates a major impact or compression event.",
+            "location": "Right side and bottom-right corner of the main product box"
+        },
+        {
+            "name": "Exposed and Damaged Internal Protective Packaging (Styrofoam)",
+            "description": "Due to the severe external packaging damage, the white expanded polystyrene (Styrofoam) protective insert is clearly visible. It appears to be compressed, fractured, and potentially broken in the exposed area, indicating a significant loss of its shock-absorbing and protective capabilities.",
+            "location": "Interior of the box, visible through the front-right tear"
+        },
+        {
+            "name": "Exposed Internal Product",
+            "description": "A portion of the actual appliance (likely an air conditioner or similar unit) is directly visible through the damaged external packaging and compromised Styrofoam. This exposure renders the product vulnerable to direct impact, scratches, dust, moisture, and other environmental contaminants.",
+            "location": "Interior of the box, visible through the front-right tear, adjacent to the Styrofoam"
+        },
+        {
+            "name": "Compromised Packaging Integrity",
+            "description": "The overall structural integrity of the packaging is completely compromised, failing to provide adequate protection for the product during handling, storage, or transit. The packaging has failed its primary function.",
+            "location": "Overall packaging structure"
+        },
+        {
+            "name": "High Probability of Product Damage",
+            "description": "Given the severity of the packaging damage and the direct exposure of the internal product, there is a very high probability of direct physical damage (e.g., dents, scratches, internal component misalignment or breakage) to the appliance itself, which cannot be fully assessed without further inspection.",
+            "location": "Internal product (appliance)"
+        }
+    ],
+    "severity_breakdown": {
+        "critical": 6,
+        "high": 0,
+        "medium": 0,
+        "low": 0
+    },
+    "overall_severity": "Critical",
+    "quality_issues": [
+        "Severe damage to primary packaging during handling or transit",
+        "Complete failure of product protection",
+        "High risk of product malfunction, cosmetic damage, or safety issues",
+        "Unacceptable condition for retail sale or end-user delivery",
+        "Indication of inadequate handling protocols or packaging resilience"
+    ],
+    "recommendations": [
+        "Immediately quarantine this unit and any other units from the same shipment or batch exhibiting similar damage.",
+        "Conduct a thorough internal inspection of the appliance for any physical, functional, or cosmetic damage before any further action.",
+        "Initiate an investigation into the root cause of the packaging damage (e.g., rough handling during loading/unloading, improper stacking, forklift impact, insufficient packaging material strength, inadequate strapping).",
+        "Implement immediate corrective actions to prevent recurrence, such as improved handling procedures, enhanced training for logistics personnel, or a review of packaging design and materials.",
+        "This unit should not be shipped or sold in its current condition. It must either be repaired, repackaged, or scrapped based on the findings of the internal product inspection."
+    ]
+}
